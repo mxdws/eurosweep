@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+
+// Do Data Fetching
+
+// Define the parameters
+const baseId = import.meta.env.BASEID
+const fixturesTableId = import.meta.env.FIXTURESTABLEID
+const teamsTableId = import.meta.env.TEAMSTABLEID
+
+const token = import.meta.env.TOKEN
+
+const headers = {
+    'Authorization': 'Bearer ' + token
+};
+
+// Get the Teams Data
+const teamsUrl = `https://api.airtable.com/v0/${baseId}/${teamsTableId}`;
+const teamsRes = await fetch(teamsUrl, {
+    method: "GET",
+    headers: headers
+});
+
+const teams = await teamsRes.json();
+
+// Get the records from the records object
+const teamsData = []
+for (let i=0; i<teams.records.length; i++) {
+    const team = {}
+    team['name'] = teams.records[i].fields['Name']
+    team['drawnBy'] = teams.records[i].fields['Drawn By']
+    team['group'] = teams.records[i].fields['Group']
+    team['played'] = teams.records[i].fields['Played']
+    team['W'] = teams.records[i].fields['W']
+    team['D'] = teams.records[i].fields['D']
+    team['L'] = teams.records[i].fields['L']
+    team['GF'] = teams.records[i].fields['GF']
+    team['GA'] = teams.records[i].fields['GA']
+    team['GD'] = teams.records[i].fields['GD']
+    team['Pts'] = teams.records[i].fields['Pts']
+
+
+    teamsData.push(team)
+}
+
+const groups = ['Group A', 'Group B', 'Group C', 'Group D', 'Group E', 'Group F' ]
+
+const groupTables = []
+for (let i=0;i<groups.length;i++) {
+    const group = {}
+    group['groupName'] = groups[i]
+
+    const groupTeam = teamsData.filter((t) => {
+        return t['group'] == groups[i]
+    })
+    
+    // Sort the Team by GD Descending
+	groupTeam.sort(function (a, b) {
+		if (a.GD < b.GD) {
+    		return 1;
+  		}
+  		if (a.GD > b.GD) {
+    		return -1;
+  		}
+  		return 0;
+    });
+    
+    // Sort the Team by Pts Descending
+	groupTeam.sort(function (a, b) {
+		if (a.Pts < b.Pts) {
+    		return 1;
+  		}
+  		if (a.GD > b.GD) {
+    		return -1;
+  		}
+  		return 0;
+    });
+
+    group['teams'] = groupTeam 
+    
+    groupTables.push(group)
+}
+
+// console.log(groupTables)
+
+
+---
+
+<Layout title="Euro 2024 Results - with Sweepstake info - Tables" hero-text="Euro 2024 Group Tables">
+
+    <main>
+		
+
+        {groupTables.map((g) => (
+            <div class="container mx-auto">
+                <table class="table w-1/2 mx-auto text-slate-800 bg-slate-50">
+                   <tr>
+                       <th colspan="8" class="text-center font-bold text-lg">{g.groupName}</th>
+                   </tr> 
+                   <tr class="text-slate-400">
+                       <th class="w-1/5 text-left">Team</th>
+                       <th class="w-1/5 text-left">Drawn By</th>
+                       <th class="w-2 text-center">Pl</th>
+                       <th class="w-2 text-center">W</th>
+                       <th class="w-2 text-center">D</th>
+                       <th class="w-2 text-center">L</th>
+                       <th class="w-2 text-center">GD</th>
+                       <th class="w-2 text-center">Pts</th>
+                   </tr>
+                   {g.teams.map((t) => (
+                       <tr>
+                           <td class="w-1/5 text-left">{t.name}</td>
+                           <td class="w-1/5 text-left">{t.drawnBy}</td>
+                           <td class="w-2 text-center">{t.played}</td>
+                           <td class="w-2 text-center">{t.W}</td>
+                           <td class="w-2 text-center">{t.D}</td>
+                           <td class="w-2 text-center">{t.L}</td>
+                           <td class="w-2 text-center">{t.GD}</td>
+                           <td class="w-2 text-center">{t.Pts}</td>
+                       </tr>
+                   ))}                                                        
+                </table>
+                
+                <br>
+
+            </div>
+
+            ))} 
+            <!-- <div class="container mx-auto">
+                <table class="table w-1/2 mx-auto bg-slate-800 text-slate-50">
+                    <tr>
+                        <th colspan="6" class="text-center font-bold text-lg">{g.groupName}</th>
+                    </tr> 
+                    <tr class="text-slate-400">
+                        <th class="w-1/5 text-left">Team</th>
+                        <th class="w-1/5 text-left">Drawn By</th>
+                        <th class="w-2 text-center">Pl</th>
+                        <th class="w-2 text-center">W</th>
+                        <th class="w-2 text-center">D</th>
+                        <th class="w-2 text-center">L</th>
+                        <th class="w-2 text-center">GD</th>
+                        <th class="w-2 text-center">Pts</th>
+                    </tr>                
+                    {g.teams.map((t) => (
+                        <tr>
+                            <td class="w-1/5 text-left">{t.name}</th>
+                            <td class="w-1/5 text-left">(t.drawnBy)</th>
+                            <td class="w-2 text-center">Pl</th>
+                            <td class="w-2 text-center">W</th>
+                            <td class="w-2 text-center">D</th>
+                            <td class="w-2 text-center">L</th>
+                            <td class="w-2 text-center">GD</th>
+                            <td class="w-2 text-center">Pts</th>
+                        </tr>
+                    ))}
+            </div> -->
+        
+
+
+
+	</main>
+</Layout>
+

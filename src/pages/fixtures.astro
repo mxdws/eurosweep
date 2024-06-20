@@ -1,0 +1,210 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import { fade } from 'astro:transitions';
+
+// Do Data Fetching
+
+// Define the parameters
+const baseId = import.meta.env.BASEID
+const fixturesTableId = import.meta.env.FIXTURESTABLEID
+const teamsTableId = import.meta.env.TEAMSTABLEID
+
+const token = import.meta.env.TOKEN
+
+const headers = {
+    'Authorization': 'Bearer ' + token
+};
+
+// Get the Fixtures Data
+const fixturesUrl = `https://api.airtable.com/v0/${baseId}/${fixturesTableId}`;
+const fixturesRes = await fetch(fixturesUrl, {
+    method: "GET",
+    headers: headers
+});
+const fixtures = await fixturesRes.json();
+// console.log("Fixtures: " + (fixtures.records.length))
+
+// Get the Teams Data
+const teamsUrl = `https://api.airtable.com/v0/${baseId}/${teamsTableId}`;
+const teamsRes = await fetch(teamsUrl, {
+    method: "GET",
+    headers: headers
+});
+const teams = await teamsRes.json();
+
+const matchData = []
+    for (let i=0; i<fixtures.records.length; i++) {
+        const match = {}
+        match['Date'] = fixtures.records[i].fields['Date']
+		match['Date Narrative'] = fixtures.records[i].fields['Date Narrative']
+        match['Time'] = fixtures.records[i].fields['Time']
+        match['Group'] = fixtures.records[i].fields['Group']
+        match['Stage'] = fixtures.records[i].fields['Stage']
+
+
+        // If there is a Home Team, resolve the Home and Away Team Ids from Teams obj
+        // While we're at it, get the Sweep Member for Home and Away
+        if ('Home Team' in fixtures.records[i].fields) {
+            // Home Team
+            const homeTeamId = fixtures.records[i].fields['Home Team'][0]
+            const homeTeamNameObj = teams.records.filter(function(t) {
+                return t.id == homeTeamId
+            })
+            match['Home Team'] = homeTeamNameObj[0].fields['Name']
+            match['Home Team Sweep'] = homeTeamNameObj[0].fields['Drawn By']
+
+
+            // Away Team
+            const awayTeamId = fixtures.records[i].fields['Away Team'][0]
+            const awayTeamNameObj = teams.records.filter(function(t) {
+                return t.id == awayTeamId
+            })
+    
+            match['Away Team'] = awayTeamNameObj[0].fields['Name']
+            match['Away Team Sweep'] = awayTeamNameObj[0].fields['Drawn By']
+        } else {
+            match['Home Team'] = ""
+            match['Home Team Sweep'] = ""
+            match['Away Team'] = ""
+            match['Away Team Sweep'] = ""
+        }
+
+        // If there is a Result, grab the resulat and Home and Away goals
+        if ('Result' in fixtures.records[i].fields) {
+            match['Result'] = fixtures.records[i].fields['Result']
+            match['Home Goals'] = fixtures.records[i].fields['Home Goals']
+            match['Away Goals'] = fixtures.records[i].fields['Away Goals']
+        } else {
+            match['Result'] = ""
+            match['Home Goals'] = ""
+            match['Away Goals'] = ""
+        }
+    
+
+
+
+        matchData.push(match)
+		
+    }
+
+    // Get just the Group Matches
+	const groupMatches = matchData.filter(function(m) {
+		return m.Stage == 'Group'
+	})
+
+    // Sort
+	// 1. Sort Group Matches by Time Ascending
+	groupMatches.sort(function (a, b) {
+		if (a.Time < b.Time) {
+    		return -1;
+  		}
+  		if (a.Time > b.Time) {
+    		return 1;
+  		}
+  		return 0;
+    });
+
+
+
+	// 2. Sort Group Matches by Date Ascending
+	groupMatches.sort(function (a, b) {
+		if (a.Date < b.Date) {
+    		return -1;
+  		}
+  		if (a.Date > b.Date) {
+    		return 1;
+  		}
+  		return 0;
+    });
+
+    // Get a list of the unique Date Narratives
+    const allGroupFixDates = groupMatches.map((x) => {
+        return x['Date Narrative']
+    })
+
+    // Get the unique values
+    const groupFixDates = allGroupFixDates.filter((item, index) => allGroupFixDates.indexOf(item) === index);
+    // console.log(groupFixDates);
+
+    const fixtureDates = []
+    for (let i=0; i<groupFixDates.length; i++) {
+        const fixtureDate={};
+        fixtureDate['date']=groupFixDates[i]
+        
+        const allFixturesOnDate = groupMatches.filter((f) => {
+            return f['Date Narrative'] == groupFixDates[i]
+        })
+
+        // Sort
+	    // 1. Sort Group Matches by Time Ascending
+	    allFixturesOnDate.sort(function (a, b) {
+	    	if (a.Time < b.Time) {
+        		return -1;
+  	    	}
+  	    	if (a.Time > b.Time) {
+        		return 1;
+  	    	}
+  	    	return 0;
+        });
+
+
+
+	    // 2. Sort Group Matches by Date Ascending
+	    allFixturesOnDate.sort(function (a, b) {
+	    	if (a.Date < b.Date) {
+        		return -1;
+  	    	}
+  	    	if (a.Date > b.Date) {
+        		return 1;
+  	    	}
+  	    	return 0;
+        });
+
+        fixtureDate['fixtures'] = allFixturesOnDate
+
+        fixtureDates.push(fixtureDate)
+    }
+
+    // console.log(fixtureDates)
+---
+
+
+<Layout title="Euro 2024 Results - with Sweepstake info" hero-text="Euro 2024 - Group Fixtures">
+	<main>
+        
+            {fixtureDates.map((f) => (
+            <div class="container mx-auto"></div>
+            <table class="table w-1/2 mx-auto text-slate-800 bg-slate-50">
+                <tr>
+                    <th colspan="6" class="text-center font-bold text-lg">{f.date}</th>
+                </tr> 
+
+                {f.fixtures.map((m) => (
+                    <tr>
+                        <td class="text-center text-sm">{m['Time']}</td>
+                        <td class="text-center">
+                            <div class="font-semibold">{m['Home Team']}</div>
+                            <div class="mt-1 text-xs badge badge-info">{m['Home Team Sweep']}</div>
+                        </td>
+                        <td class="text-right font-semibold">{m['Home Goals']}</td>
+                        <td class="text-center">-</td>
+                        <td class="text-left font-semibold">{m['Away Goals']}</td>
+                        <td class="text-center">
+                            <div class="font-semibold">{m['Away Team']}</div>
+                            <div class="mt-1 text-xs badge badge-info">{m['Away Team Sweep']}</div>
+                        </td>
+                    </tr>
+
+                ))}
+
+            </table>
+
+            <br>
+            ))}
+	</main>
+</Layout>
+
+<style>
+	
+</style>
