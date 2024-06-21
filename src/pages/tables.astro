@@ -39,6 +39,7 @@ for (let i=0; i<teams.records.length; i++) {
     team['GA'] = teams.records[i].fields['GA']
     team['GD'] = teams.records[i].fields['GD']
     team['Pts'] = teams.records[i].fields['Pts']
+    team['Rank'] = teams.records[i].fields['Rank']
 
 
     teamsData.push(team)
@@ -57,34 +58,12 @@ for (let i=0;i<groups.length;i++) {
     
     // console.log(groupTeam)
 
-    // 1. Sort the Team by GF Descending
+    // 1. Sort the Team by Rank Ascending
 	groupTeam.sort(function (a, b) {
-		if (a.GF < b.GF) {
+		if (a.Rank > b.Rank) {
     		return 1;
   		}
-  		if (a.GF > b.GF) {
-    		return -1;
-  		}
-  		return 0;
-    });
-
-    // 2. Sort the Team by GD Descending
-	groupTeam.sort(function (a, b) {
-		if (a.GD < b.GD) {
-    		return 1;
-  		}
-  		if (a.GD > b.GD) {
-    		return -1;
-  		}
-  		return 0;
-    });
-    
-    // 3. Sort the Team by Pts Descending
-	groupTeam.sort(function (a, b) {
-		if (a.Pts < b.Pts) {
-    		return 1;
-  		}
-  		if (a.Pts > b.Pts) {
+  		if (a.Rank < b.Rank) {
     		return -1;
   		}
   		return 0;
