@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import FixtureList from '../components/FixturesList.astro';
 import { fade } from 'astro:transitions';
 
 // Do Data Fetching
@@ -93,121 +93,37 @@ const matchData = []
 		return m.Stage == 'Group'
 	})
 
-    // Sort
-	// 1. Sort Group Matches by Time Ascending
-	groupMatches.sort(function (a, b) {
-		if (a.Time < b.Time) {
-    		return -1;
-  		}
-  		if (a.Time > b.Time) {
-    		return 1;
-  		}
-  		return 0;
-    });
+    // Get just the Round of 16 Matches
+	const r16Matches = matchData.filter(function(m) {
+		return m.Stage == 'Round of 16'
+	})
+
+    // Get just the Quarter-finals Matches
+	const qfMatches = matchData.filter(function(m) {
+		return m.Stage == 'Quarter-finals'
+	})
+
+    // Get just the Semi-finals Matches
+	const sfMatches = matchData.filter(function(m) {
+		return m.Stage == 'Semi-finals'
+	})
+
+    // Get just the Final Matches
+	const fMatches = matchData.filter(function(m) {
+		return m.Stage == 'Final'
+	})
 
 
-
-	// 2. Sort Group Matches by Date Ascending
-	groupMatches.sort(function (a, b) {
-		if (a.Date < b.Date) {
-    		return -1;
-  		}
-  		if (a.Date > b.Date) {
-    		return 1;
-  		}
-  		return 0;
-    });
-
-    // Get a list of the unique Date Narratives
-    const allGroupFixDates = groupMatches.map((x) => {
-        return x['Date Narrative']
-    })
-
-    // Get the unique values
-    const groupFixDates = allGroupFixDates.filter((item, index) => allGroupFixDates.indexOf(item) === index);
-    // console.log(groupFixDates);
-
-    const fixtureDates = []
-    for (let i=0; i<groupFixDates.length; i++) {
-        const fixtureDate={};
-        fixtureDate['date']=groupFixDates[i]
-        
-        const allFixturesOnDate = groupMatches.filter((f) => {
-            return f['Date Narrative'] == groupFixDates[i]
-        })
-
-        // Sort
-	    // 1. Sort Group Matches by Time Ascending
-	    allFixturesOnDate.sort(function (a, b) {
-	    	if (a.Time < b.Time) {
-        		return -1;
-  	    	}
-  	    	if (a.Time > b.Time) {
-        		return 1;
-  	    	}
-  	    	return 0;
-        });
-
-
-
-	    // 2. Sort Group Matches by Date Ascending
-	    allFixturesOnDate.sort(function (a, b) {
-	    	if (a.Date < b.Date) {
-        		return -1;
-  	    	}
-  	    	if (a.Date > b.Date) {
-        		return 1;
-  	    	}
-  	    	return 0;
-        });
-
-        fixtureDate['fixtures'] = allFixturesOnDate
-
-        fixtureDates.push(fixtureDate)
-    }
-
-    // console.log(fixtureDates)
 ---
 
 
 <Layout title="Euro 2024 Results - with Sweepstake info" herotext="Fixtures">
 	<main>
-        
-        <div class="container lg:w-2/3 md:w-full sm:w-full mx-auto">
-            <table class="table w-full mx-auto text-slate-50 bg-blue-400 my-6">
-                <tr>
-                    <td class="text-center font-bold text-lg">Group Matches</td>
-                </tr> 
-            </table>            
-            {fixtureDates.map((f) => (
-            <table class="table w-full mx-auto text-slate-800 bg-slate-50">
-                <tr>
-                    <th colspan="6" class="text-center font-bold text-lg">{f.date}</th>
-                </tr> 
-
-                {f.fixtures.map((m) => (
-                    <tr>
-                        <td class="text-center text-sm">{m['Time']}</td>
-                        <td class="text-center">
-                            <div class="font-semibold">{m['Home Team']}</div>
-                            <div class="text-xs w-16 mx-auto text-center my-1 py-1 bg-blue-400 rounded text-slate-50">{m['Home Team Sweep']}</div>
-                        </td>
-                        <td class="text-right font-semibold">{m['Home Goals']}</td>
-                        <td class="text-center">-</td>
-                        <td class="text-left font-semibold">{m['Away Goals']}</td>
-                        <td class="text-center">
-                            <div class="font-semibold">{m['Away Team']}</div>
-                            <div class="text-xs w-16 mx-auto text-center my-1 py-1 bg-blue-400 rounded text-slate-50">{m['Away Team Sweep']}</div>
-                        </td>
-                    </tr>
-
-                ))}
-
-            </table>
-
-            <br>
-            ))}
-        </div>
+        <FixtureList roundMatches={groupMatches} roundTitle="Group Matches" />       
+        <FixtureList roundMatches={r16Matches} roundTitle="Round of 16" />       
+        <FixtureList roundMatches={qfMatches} roundTitle="Quarter-finals" />       
+        <FixtureList roundMatches={sfMatches} roundTitle="Semi-finals" />       
+        <FixtureList roundMatches={fMatches} roundTitle="Final" />       
 	</main>
 </Layout>
 
