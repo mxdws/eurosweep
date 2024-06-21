@@ -85,11 +85,9 @@ const { roundMatches, roundTitle } = Astro.props;
 ---
 
 <div class="container lg:w-2/3 md:w-full sm:w-full mx-auto">
-	<table class="table w-full mx-auto text-slate-50 bg-blue-400 my-6 border-0">
-		<tr>
-			<td class="text-center font-bold text-lg">{roundTitle}</td>
-		</tr> 
-	</table>            
+	<div class="w-full mx-auto text-slate-50 bg-blue-400 py-3 my-6 rounded-lg border-0">
+		<p class="text-center font-bold text-lg">{roundTitle}</p>
+	</div>            
 	{fixtureDates.map((f) => (
 	<table class="table w-full mx-auto text-slate-800 bg-slate-50">
 		<tr>
