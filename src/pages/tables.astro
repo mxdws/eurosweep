@@ -100,12 +100,12 @@ for (let i=0;i<groups.length;i++) {
                    </tr> 
                    <tr class="text-slate-400">
                        <th class="w-2/5 text-left">Team</th>
-                       <th class="text-sm text-center">Pl</th>
-                       <th class="text-sm text-center">W</th>
-                       <th class="text-sm text-center">D</th>
-                       <th class="text-sm text-center">L</th>
-                       <th class="text-sm text-center">GD</th>
-                       <th class="text-sm text-center">Pts</th>
+                       <th class="text-sm mx-auto text-center">Pl</th>
+                       <th class="text-sm mx-auto text-center">W</th>
+                       <th class="text-sm mx-auto text-center">D</th>
+                       <th class="text-sm mx-auto text-center">L</th>
+                       <th class="text-sm mx-auto text-center">GD</th>
+                       <th class="text-sm mx-auto text-center">Pts</th>
                    </tr>
                    {g.teams.map((t) => (
                        <tr>
@@ -113,12 +113,12 @@ for (let i=0;i<groups.length;i++) {
                              <div class="font-semibold">{t.name}</div>
                              <div class="text-xs w-16 text-center my-1 py-1 bg-blue-400 rounded text-slate-50">{t.drawnBy}</div>
                            </td>
-                           <td class="text-center">{t.played}</td>
-                           <td class="text-center">{t.W}</td>
-                           <td class="text-center">{t.D}</td>
-                           <td class="text-center">{t.L}</td>
-                           <td class="text-center">{t.GD}</td>
-                           <td class="text-center font-semibold">{t.Pts}</td>
+                           <td class="mx-1 text-center">{t.played}</td>
+                           <td class="mx-auto text-center">{t.W}</td>
+                           <td class="mx-auto text-center">{t.D}</td>
+                           <td class="mx-auto text-center">{t.L}</td>
+                           <td class="mx-auto text-center">{t.GD}</td>
+                           <td class="mx-auto text-center font-semibold">{t.Pts}</td>
                        </tr>
                    ))}                                                        
                 </table>
