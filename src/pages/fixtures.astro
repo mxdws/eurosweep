@@ -173,9 +173,9 @@ const matchData = []
 <Layout title="Euro 2024 Results - with Sweepstake info" hero-text="Euro 2024 - Group Fixtures">
 	<main>
         
+        <div class="container lg:w-2/3 md:w-full sm:w-full mx-auto">
             {fixtureDates.map((f) => (
-            <div class="container mx-auto"></div>
-            <table class="table w-1/2 mx-auto text-slate-800 bg-slate-50">
+            <table class="table w-full mx-auto text-slate-800 bg-slate-50">
                 <tr>
                     <th colspan="6" class="text-center font-bold text-lg">{f.date}</th>
                 </tr> 
@@ -185,14 +185,14 @@ const matchData = []
                         <td class="text-center text-sm">{m['Time']}</td>
                         <td class="text-center">
                             <div class="font-semibold">{m['Home Team']}</div>
-                            <div class="mt-1 text-xs badge badge-info">{m['Home Team Sweep']}</div>
+                            <div class="text-xs w-16 mx-auto text-center my-1 py-1 bg-blue-400 rounded text-slate-50">{m['Home Team Sweep']}</div>
                         </td>
                         <td class="text-right font-semibold">{m['Home Goals']}</td>
                         <td class="text-center">-</td>
                         <td class="text-left font-semibold">{m['Away Goals']}</td>
                         <td class="text-center">
                             <div class="font-semibold">{m['Away Team']}</div>
-                            <div class="mt-1 text-xs badge badge-info">{m['Away Team Sweep']}</div>
+                            <div class="text-xs w-16 mx-auto text-center my-1 py-1 bg-blue-400 rounded text-slate-50">{m['Away Team Sweep']}</div>
                         </td>
                     </tr>
 
@@ -202,6 +202,7 @@ const matchData = []
 
             <br>
             ))}
+        </div>
 	</main>
 </Layout>
 

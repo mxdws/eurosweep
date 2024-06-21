@@ -92,74 +92,41 @@ for (let i=0;i<groups.length;i++) {
     <main>
 		
 
+        <div class="container lg:w-2/3 md:w-full sm:w-full mx-auto">
         {groupTables.map((g) => (
-            <div class="container mx-auto">
-                <table class="table w-1/2 mx-auto text-slate-800 bg-slate-50">
+                <table class="table table-fixed w-full mx-auto text-slate-800 bg-slate-50">
                    <tr>
-                       <th colspan="8" class="text-center font-bold text-lg">{g.groupName}</th>
+                       <th colspan="7" class="text-center font-bold text-lg">{g.groupName}</th>
                    </tr> 
                    <tr class="text-slate-400">
-                       <th class="w-1/5 text-left">Team</th>
-                       <th class="w-1/5 text-left">Drawn By</th>
-                       <th class="w-2 text-center">Pl</th>
-                       <th class="w-2 text-center">W</th>
-                       <th class="w-2 text-center">D</th>
-                       <th class="w-2 text-center">L</th>
-                       <th class="w-2 text-center">GD</th>
-                       <th class="w-2 text-center">Pts</th>
+                       <th class="w-2/5 text-left">Team</th>
+                       <th class="text-sm text-center">Pl</th>
+                       <th class="text-sm text-center">W</th>
+                       <th class="text-sm text-center">D</th>
+                       <th class="text-sm text-center">L</th>
+                       <th class="text-sm text-center">GD</th>
+                       <th class="text-sm text-center">Pts</th>
                    </tr>
                    {g.teams.map((t) => (
                        <tr>
-                           <td class="w-1/5 text-left">{t.name}</td>
-                           <td>
-                             <div class="w-1/5 text-left text-xs badge badge-info">{t.drawnBy}</div>
+                           <td class="text-left">
+                             <div class="font-semibold">{t.name}</div>
+                             <div class="text-xs w-16 text-center my-1 py-1 bg-blue-400 rounded text-slate-50">{t.drawnBy}</div>
                            </td>
-                           <td class="w-2 text-center">{t.played}</td>
-                           <td class="w-2 text-center">{t.W}</td>
-                           <td class="w-2 text-center">{t.D}</td>
-                           <td class="w-2 text-center">{t.L}</td>
-                           <td class="w-2 text-center">{t.GD}</td>
-                           <td class="w-2 text-center">{t.Pts}</td>
+                           <td class="text-center">{t.played}</td>
+                           <td class="text-center">{t.W}</td>
+                           <td class="text-center">{t.D}</td>
+                           <td class="text-center">{t.L}</td>
+                           <td class="text-center">{t.GD}</td>
+                           <td class="text-center font-semibold">{t.Pts}</td>
                        </tr>
                    ))}                                                        
                 </table>
                 
                 <br>
 
-            </div>
 
             ))} 
-            <!-- <div class="container mx-auto">
-                <table class="table w-1/2 mx-auto bg-slate-800 text-slate-50">
-                    <tr>
-                        <th colspan="6" class="text-center font-bold text-lg">{g.groupName}</th>
-                    </tr> 
-                    <tr class="text-slate-400">
-                        <th class="w-1/5 text-left">Team</th>
-                        <th class="w-1/5 text-left">Drawn By</th>
-                        <th class="w-2 text-center">Pl</th>
-                        <th class="w-2 text-center">W</th>
-                        <th class="w-2 text-center">D</th>
-                        <th class="w-2 text-center">L</th>
-                        <th class="w-2 text-center">GD</th>
-                        <th class="w-2 text-center">Pts</th>
-                    </tr>                
-                    {g.teams.map((t) => (
-                        <tr>
-                            <td class="w-1/5 text-left">{t.name}</th>
-                            <td class="w-1/5 text-left">(t.drawnBy)</th>
-                            <td class="w-2 text-center">Pl</th>
-                            <td class="w-2 text-center">W</th>
-                            <td class="w-2 text-center">D</th>
-                            <td class="w-2 text-center">L</th>
-                            <td class="w-2 text-center">GD</th>
-                            <td class="w-2 text-center">Pts</th>
-                        </tr>
-                    ))}
-            </div> -->
-        
-
-
 
 	</main>
 </Layout>
