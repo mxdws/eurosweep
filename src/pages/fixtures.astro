@@ -43,8 +43,8 @@ const matchData = []
         match['Stage'] = fixtures.records[i].fields['Stage']
 
 
-        // If there is a Home Team, resolve the Home and Away Team Ids from Teams obj
-        // While we're at it, get the Sweep Member for Home and Away
+        // If there is a Home Team, resolve the Home Team Ids from Teams obj
+        // While we're at it, get the Sweep Member for Home
         if ('Home Team' in fixtures.records[i].fields) {
             // Home Team
             const homeTeamId = fixtures.records[i].fields['Home Team'][0]
@@ -53,8 +53,14 @@ const matchData = []
             })
             match['Home Team'] = homeTeamNameObj[0].fields['Name']
             match['Home Team Sweep'] = homeTeamNameObj[0].fields['Drawn By']
+        } else {
+            match['Home Team'] = ""
+            match['Home Team Sweep'] = ""
+        }
 
-
+        // If there is an Away Team, resolve the Away Team Ids from Teams obj
+        // While we're at it, get the Sweep Member for Away
+        if ('Away Team' in fixtures.records[i].fields) {
             // Away Team
             const awayTeamId = fixtures.records[i].fields['Away Team'][0]
             const awayTeamNameObj = teams.records.filter(function(t) {
@@ -64,13 +70,11 @@ const matchData = []
             match['Away Team'] = awayTeamNameObj[0].fields['Name']
             match['Away Team Sweep'] = awayTeamNameObj[0].fields['Drawn By']
         } else {
-            match['Home Team'] = ""
-            match['Home Team Sweep'] = ""
             match['Away Team'] = ""
             match['Away Team Sweep'] = ""
         }
 
-        // If there is a Result, grab the resulat and Home and Away goals
+        // If there is a Result, grab the result and Home and Away goals
         if ('Result' in fixtures.records[i].fields) {
             match['Result'] = fixtures.records[i].fields['Result']
             match['Home Goals'] = fixtures.records[i].fields['Home Goals']
