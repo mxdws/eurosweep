@@ -4,7 +4,7 @@
 // 	roundTitle: string;
 // }
 
-const { roundMatches, roundTitle } = Astro.props;
+const { roundMatches, roundTitle, roundSection } = Astro.props;
 
 // Data Handling of the Props
     
@@ -84,6 +84,7 @@ const { roundMatches, roundTitle } = Astro.props;
     // console.log(fixtureDates)
 ---
 
+<section id={roundSection}
 <div class="container lg:w-2/3 md:w-full sm:w-full mx-auto">
 	<div class="w-full mx-auto text-slate-50 bg-blue-400 py-3 my-6 rounded-lg border-0">
 		<p class="text-center font-bold text-lg">{roundTitle}</p>
