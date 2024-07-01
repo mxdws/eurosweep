@@ -123,13 +123,15 @@ const matchData = []
 
 <Layout title="Euro 2024 Results - with Sweepstake info" herotext="Fixtures">
 	<main>
-		<div class="mx-auto my-3 flex justify-center">	
-			<a href="#group-matches"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Group Matches</button></a>
-			<a href="#r-16"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Round of 16</button></a>
-			<a href="#quarter-finals"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Quarter-Finals</button></a>
-			<a href="#semi-finals"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Semi-Finals</button></a>
-			<a href="#final"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Final</button></a>
-		</div>
+        <div class="container lg:w-2/3 md:w-full sm:w-full mx-auto"></div>
+            <div class="mx-auto my-3 flex justify-center">	
+                <a href="#group-matches"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Group Matches</button></a>
+                <a href="#r-16"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Round of 16</button></a>
+                <a href="#quarter-finals"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Quarter-Finals</button></a>
+                <a href="#semi-finals"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Semi-Finals</button></a>
+                <a href="#final"><button class="btn btn-active btn-primary mx-3 text-slate-50 border-slate-50">Final</button></a>
+            </div>
+        </div>
 
         <FixtureList roundMatches={groupMatches} roundTitle="Group Matches" roundSection="group-matches" />       
         <FixtureList roundMatches={r16Matches} roundTitle="Round of 16" roundSection="r-16" />       
